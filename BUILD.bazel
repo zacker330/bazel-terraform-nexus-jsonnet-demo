@@ -1,0 +1,28 @@
+load("@io_bazel_rules_jsonnet//jsonnet:jsonnet.bzl", "jsonnet_library", "jsonnet_to_json")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+
+
+filegroup(
+    name = "garnish_txt",
+    srcs = [
+        "garnish.txt",
+    ],
+)
+
+jsonnet_library(
+    name = "security",
+    srcs = [
+        "security.libsonnet"
+    ]
+)
+
+jsonnet_to_json(
+    name = "main",
+    src = "main.tf.jsonnet",
+    deps = [
+    ":security",
+    ],
+    imports = ["security.libsonnet"],
+    outs = ["main.tf.json"]
+)
+

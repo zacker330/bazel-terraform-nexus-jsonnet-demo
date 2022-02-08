@@ -1,0 +1,116 @@
+{
+   "provider": {
+      "nexus": {
+         "insecure": true,
+         "password": "admin",
+         "url": "http://127.0.0.1:8081",
+         "username": "admin"
+      }
+   },
+   "resource": {
+      "nexus_blobstore_file": {
+         "file": {
+            "name": "blobstore-file",
+            "path": "/nexus-data/blobstore-file",
+            "soft_quota": {
+               "limit": 1024000000,
+               "type": "spaceRemainingQuota"
+            }
+         }
+      },
+      "nexus_repository": {
+         "apt_hosted": {
+            "apt": {
+               "distribution": "bionic"
+            },
+            "apt_signing": {
+               "keypair": "<keypair>",
+               "passphrase": "<passphrase>"
+            },
+            "format": "apt",
+            "name": "apt-repo",
+            "storage": {
+               "blob_store_name": "blobstore-file",
+               "strict_content_type_validation": true,
+               "write_policy": "ALLOW_ONCE"
+            },
+            "type": "hosted"
+         },
+         "docker_group": {
+            "docker": {
+               "force_basic_auth": false,
+               "http_port": 5000,
+               "https_port": 0,
+               "v1enabled": false
+            },
+            "format": "docker",
+            "group": {
+               "member_names": [
+                  "dockerReleases"
+               ]
+            },
+            "name": "docker-group",
+            "online": true,
+            "storage": {
+               "blob_store_name": "blobstore-file",
+               "strict_content_type_validation": true
+            },
+            "type": "group"
+         }
+      },
+      "nexus_repository_docker_hosted": {
+         "dockerReleases": {
+            "docker": {
+               "force_basic_auth": false,
+               "v1_enabled": false
+            },
+            "name": "dockerReleases",
+            "online": true,
+            "storage": {
+               "blob_store_name": "default",
+               "strict_content_type_validation": true,
+               "write_policy": "ALLOW"
+            }
+         }
+      },
+      "nexus_security_role": {
+         "docker_deploy": {
+            "description": "Docker deployment role",
+            "name": "docker-deploy",
+            "privileges": [
+               "nx-repository-view-docker-*-*"
+            ],
+            "roleid": "docker-deploy"
+         },
+         "nx_admin": {
+            "description": "Administrator role",
+            "name": "nx-adminx",
+            "privileges": [
+               "nx-all"
+            ],
+            "roleid": "nx-adminx"
+         }
+      },
+      "nexus_security_user": {
+         "adminx": {
+            "email": "nexus@example.com",
+            "firstname": "Administrator",
+            "lastname": "User",
+            "password": "adminxxx",
+            "roles": [
+               "nx-adminx"
+            ],
+            "status": "active",
+            "userid": "adminx"
+         }
+      }
+   },
+   "terraform": {
+      "required_providers": {
+         "nexus": {
+            "source": "datadrivers/nexus",
+            "version": "1.17.0"
+         }
+      }
+   }
+}
