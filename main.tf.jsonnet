@@ -1,4 +1,4 @@
-local security = import "security.libsonnet";
+local secrets = import "secrets.libsonnet";
 {
     terraform: {
       required_providers:{
@@ -9,12 +9,7 @@ local security = import "security.libsonnet";
       }
    },
     provider:{
-        nexus:{
-            insecure: true,
-            password: "admin",
-            url: "http://127.0.0.1:8081",
-            username: "admin"
-        },
+        nexus: secrets.nexus.auth
     },
     resource:{
         nexus_blobstore_file:{
@@ -138,13 +133,12 @@ local security = import "security.libsonnet";
             },
         },
         nexus_security_user:{
-            "adminx": {
-            userid: "adminx",
+            [secrets.nexus.admin.username]: {
+            userid: secrets.nexus.admin.username,
             firstname: "Administrator",
             lastname: "User",
             email: "nexus@example.com",
-            // password: [security.nexus.admin.password],
-            password: security.nexus.admin.password,
+            password: secrets.nexus.admin.password,
             roles: [$.resource.nexus_security_role.nx_admin.roleid],
             status: "active"
             },

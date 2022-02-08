@@ -10,9 +10,9 @@ filegroup(
 )
 
 jsonnet_library(
-    name = "security",
+    name = "secrets",
     srcs = [
-        "security.libsonnet"
+        "secrets.libsonnet"
     ]
 )
 
@@ -20,9 +20,9 @@ jsonnet_to_json(
     name = "main",
     src = "main.tf.jsonnet",
     deps = [
-    ":security",
+    ":secrets",
     ],
-    imports = ["security.libsonnet"],
+    imports = ["secrets.libsonnet"],
     outs = ["main.tf.json"]
 )
 
